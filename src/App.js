@@ -4,7 +4,7 @@ import Homepage from "./Pages/Homepage/Homepage.component";
 import ShopPage from "./Pages/Shop/ShopPage";
 import SignInAndSignUp from "./Pages/sign-in-and-sign-up/sign-in-and-sign-up";
 
-import { auth } from "./Firebase/Firebase.utils";
+import { auth, createUserProfiledDocument } from "./Firebase/Firebase.utils";
 import Header from "./Components/Header/Header";
 import "./App.css";
 
@@ -18,8 +18,20 @@ class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
-      this.setState({ currentUser: user });
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
+      if (userAuth) {
+        const userRef = await createUserProfiledDocument(userAuth);
+        userRef.onSnapshot((snapShot) => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data(),
+            },
+          });
+        });
+      } else {
+        this.setState({ currentUser: userAuth });
+      }
     });
   }
   componentWillUnmount() {
