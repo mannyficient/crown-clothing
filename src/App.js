@@ -5,6 +5,7 @@ import Homepage from "./Pages/Homepage/Homepage.component";
 import ShopPage from "./Pages/Shop/ShopPage";
 import SignInAndSignUp from "./Pages/sign-in-and-sign-up/sign-in-and-sign-up";
 import CheckoutPage from "./Pages/Checkout/CheckoutPage";
+import Contact from "./Pages/Contact/Contact";
 
 import { auth, createUserProfiledDocument } from "./Firebase/Firebase.utils";
 import { setCurrentUser } from "./Redux/User/user.actions";
@@ -40,15 +41,16 @@ class App extends Component {
       <div>
         <Header></Header>
         <Switch>
-          <Route exact path="/" component={Homepage}></Route>
-          <Route path="/shop" component={ShopPage}></Route>
-          <Route exact path="/checkout" component={CheckoutPage}></Route>
+          <Route exact path='/' component={Homepage}></Route>
+          <Route path='/shop' component={ShopPage}></Route>
+          <Route path='/contact' component={Contact}></Route>
+          <Route exact path='/checkout' component={CheckoutPage}></Route>
           <Route
             exact
-            path="/signin"
+            path='/signin'
             render={() =>
               this.props.currentUser ? (
-                <Redirect to="/"></Redirect>
+                <Redirect to='/'></Redirect>
               ) : (
                 <SignInAndSignUp></SignInAndSignUp>
               )
