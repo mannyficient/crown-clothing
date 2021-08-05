@@ -7,18 +7,23 @@ import SignInAndSignUp from "./Pages/sign-in-and-sign-up/sign-in-and-sign-up";
 import CheckoutPage from "./Pages/Checkout/CheckoutPage";
 import Contact from "./Pages/Contact/Contact";
 
-import { auth, createUserProfiledDocument } from "./Firebase/Firebase.utils";
+import {
+  auth,
+  createUserProfiledDocument,
+  addCollectionAndDocuments,
+} from "./Firebase/Firebase.utils";
 import { setCurrentUser } from "./Redux/User/user.actions";
 import { selectCurrentUser } from "./Redux/User/user.selector";
 import { createStructuredSelector } from "reselect";
 import Header from "./Components/Header/Header";
+import { selectCollectionForPreview } from "./Redux/Shop/shop.selector";
 import "./App.css";
 
 class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
+    const { setCurrentUser, collectionsArray } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         const userRef = await createUserProfiledDocument(userAuth);
@@ -30,6 +35,10 @@ class App extends Component {
         });
       } else {
         setCurrentUser(userAuth);
+        addCollectionAndDocuments(
+          "collections",
+          collectionsArray.map(({ title, items }) => ({ title, items }))
+        );
       }
     });
   }
@@ -63,6 +72,7 @@ class App extends Component {
 }
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
+  collectionsArray: selectCollectionForPreview,
 });
 
 const mapDispatchToProps = (dispatch) => ({
