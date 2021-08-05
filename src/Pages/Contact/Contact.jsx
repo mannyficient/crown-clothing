@@ -42,8 +42,8 @@ export class Contact extends Component {
             required
           ></FormInput>
           <FormInput
-            type='text'
-            name='password'
+            type='tel'
+            name='number'
             value={number}
             onChange={this.handleChange}
             label='Number'
@@ -51,7 +51,7 @@ export class Contact extends Component {
           ></FormInput>
           <FormInput
             type='text'
-            name='confirmPassword'
+            name='message'
             value={message}
             onChange={this.handleChange}
             label='Message'
